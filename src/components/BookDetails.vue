@@ -7,31 +7,54 @@
         <div class="row">
           <div class="six columns">
             <label for="titleInput">Title</label>
-            <input class="u-full-width" type="text" v-model="book.title">
+            <p v-if="show">{{book.title}}</p>
+            <input class="u-full-width" type="text" v-model="book.title" v-if="edit || create">
           </div>
           <div class="six columns">
             <label for="authorInput">Author</label>
-            <input class="u-full-width" type="text" v-model="book.author">
+            <router-link :to="`/author/${book.author_id}`" v-if="show">{{book.author}}</router-link>
+            <select class="u-full-width" v-model="selectedAuthor" v-if="edit || create" @change="onSelectAuthor()">
+              <option selected :value="null">Select an author</option>
+              <option v-for="a in authors" :key="a._id" :value="{ _id: a._id , author: a.author }">
+                {{a.author}}
+              </option>
+            </select>
           </div>
         </div>
         <div class="row">
           <div class="six columns">
-            <label for="publisherInput">Publisher</label>
-            <input class="u-full-width" type="text" v-model="book.publisher">
+            <label for="publisherInput">Publisher {{this.book.publisher_id}} {{this.book.publisher}}</label>
+            <router-link :to="`/publisher/${book.publisher_id}`" v-if="show">{{book.publisher}}</router-link>
+            <select class="u-full-width" v-model="selectedPublisher" v-if="edit || create" @change="onSelectPublisher()">
+              <option selected :value="null">Select an publisher</option>
+              <option v-for="a in publishers" :key="a._id" :value="{ _id: a._id , publisher: a.publisher }">
+                {{a.publisher}}
+              </option>
+            </select>
           </div>
           <div class="six columns">
             <label for="editionInput">Edition</label>
-            <input class="u-full-width" type="text" v-model="book.edition">
+            <p v-if="show">{{book.edition}}</p>
+            <input class="u-full-width" type="text" v-model="book.edition" v-if="edit || create">
           </div>
         </div>
         <div class="row">
           <div class="six columns">
             <label for="copyrightInput">Copyright</label>
-            <input class="u-full-width" type="number" v-model="book.copyright">
+            <p v-if="show">{{book.copyright}}</p>
+            <input class="u-full-width" type="number" v-model="book.copyright" v-if="edit || create">
           </div>
           <div class="six columns">
             <label for="languageInput">Language</label>
-            <input class="u-full-width" type="text" v-model="book.language">
+            <p v-if="show">{{book.language}}</p>
+            <input class="u-full-width" type="text" v-model="book.language" v-if="edit || create">
+          </div>
+        </div>
+        <div class="row">
+          <div class="six columns">
+            <label for="languageInput">Pages</label>
+            <p v-if="show">{{book.pages}}</p>
+            <input class="u-full-width" type="text" v-model="book.pages" v-if="edit || create">
           </div>
         </div>
         <div class="row">
@@ -49,17 +72,17 @@
     useRoute
   } from 'vue-router'
 
-  import {
-    v4 as uuidv4
-  } from 'uuid';
-
   export default {
     name: "Book Details",
-    props: ['create', 'edit', 'create'],
+    props: ['show', 'edit', 'create'],
     data() {
       return {
         title: "Book Data",
-        book: {}
+        book: {},
+        selectedAuthor: null,
+        selectedPublisher: null,
+        authors: [],
+        publishers: []
       }
     },
     mounted() {
@@ -68,17 +91,21 @@
         this.GetBookById(route.params.id);
       else {
         this.book = {
-          '_id': uuidv4(),
+          '_id': Math.floor(Math.random()*100000000),
           'title': '',
           'edition': '',
           'copyright': 0,
           'language': '',
-          'pages': 0,
-          'author': '',
-          'author_id': 0,
-          'publisher': '',
-          'publisher_id': 0
+          'pages': 0, //
+          'author': null, //
+          'author_id': null, //
+          'publisher': null, //
+          'publisher_id': null //
         };
+      }
+      if (this.create || this.edit) {
+        this.GetAllAuthors();
+        this.GetAllPublishers();
       }
     },
     methods: {
@@ -90,9 +117,17 @@
             }
           });
 
-          if (httpResponse.status === 200)
+          if (httpResponse.status === 200) {
             this.book = await httpResponse.json();
-          else {
+            this.selectedAuthor = {
+              _id: this.book.author_id,
+              author: this.book.author
+            };
+            this.selectedPublisher = {
+              _id: this.book.publisher_id,
+              publisher: this.book.publisher
+            };
+          } else {
             alert(await httpResponse.text());
             this.$router.push(`/book`);
           }
@@ -136,6 +171,50 @@
           console.log(error);
           alert(`An error ocurred updating the book.`);
         }
+      },
+      async GetAllAuthors() {
+        try {
+          const httpResponse = await fetch(`${this.url}/authorGetAll`, {
+            headers: {
+              'Accept': 'application/json'
+            }
+          });
+          if (httpResponse.status === 200)
+            this.authors = await httpResponse.json();
+          else {
+            this.authors = [];
+            alert(await httpResponse.text());
+          }
+        } catch (error) {
+          console.error(error);
+          alert(`An error ocurred geting the authors.`);
+        }
+      },
+      async GetAllPublishers() {
+        try {
+          const httpResponse = await fetch(`${this.url}/publisherGetAll`, {
+            headers: {
+              'Accept': 'application/json'
+            }
+          });
+          if (httpResponse.status === 200)
+            this.publishers = await httpResponse.json();
+          else {
+            this.publishers = [];
+            alert(await httpResponse.text());
+          }
+        } catch (error) {
+          console.error(error);
+          alert(`An error ocurred geting the publishers.`);
+        }
+      },
+      onSelectAuthor() {
+        this.book.author_id = this.selectedAuthor? this.selectedAuthor._id: null;
+        this.book.author = this.selectedAuthor? this.selectedAuthor.author: null;
+      },
+      onSelectPublisher() {
+        this.book.publisher_id = this.selectedPublisher? this.selectedPublisher._id: null;
+        this.book.publisher = this.selectedPublisher? this.selectedPublisher.publisher: null;
       }
     }
   };
