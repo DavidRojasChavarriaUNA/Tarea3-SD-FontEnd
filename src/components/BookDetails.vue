@@ -23,7 +23,7 @@
         </div>
         <div class="row">
           <div class="six columns">
-            <label for="publisherInput">Publisher {{this.book.publisher_id}} {{this.book.publisher}}</label>
+            <label for="publisherInput">Publisher</label>
             <router-link :to="`/publisher/${book.publisher_id}`" v-if="show">{{book.publisher}}</router-link>
             <select class="u-full-width" v-model="selectedPublisher" v-if="edit || create" @change="onSelectPublisher()">
               <option selected :value="null">Select an publisher</option>
@@ -94,9 +94,9 @@
           '_id': Math.floor(Math.random()*100000000),
           'title': '',
           'edition': '',
-          'copyright': 0,
+          'copyright': null,
           'language': '',
-          'pages': 0, //
+          'pages': null, //
           'author': null, //
           'author_id': null, //
           'publisher': null, //

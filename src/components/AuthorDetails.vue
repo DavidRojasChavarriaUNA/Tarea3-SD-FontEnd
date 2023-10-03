@@ -79,7 +79,7 @@
           '_id': Math.floor(Math.random() * 100000000),
           'author': '',
           'nationality': '',
-          'birth_year': 0,
+          'birth_year': null,
           'fields': '',
           books: []
         };
