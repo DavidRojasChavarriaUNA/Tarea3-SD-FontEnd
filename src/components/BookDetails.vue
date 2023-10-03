@@ -54,7 +54,7 @@
           <div class="six columns">
             <label for="languageInput">Pages</label>
             <p v-if="show">{{book.pages}}</p>
-            <input class="u-full-width" type="text" v-model="book.pages" v-if="edit || create">
+            <input class="u-full-width" type="number" v-model="book.pages" v-if="edit || create">
           </div>
         </div>
         <div class="row">
