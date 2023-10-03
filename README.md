@@ -17,3 +17,6 @@ Proyecto Frontend con Vue.js consumiento funciones como servicio hospedadadas en
 
 Repositorio \
 	https://github.com/DavidRojasChavarriaUNA/Tarea3-SD-FontEnd
+
+url proyecto \
+	https://tarea3-sd-frontend.netlify.app/

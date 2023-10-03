@@ -9,7 +9,7 @@
     <router-view />
     <div class="row">
       <button disabled="disabled" class="twelve columns button-primary">
-        Copyright (c) 2020 - Armando Arce-Orozco
+        Tarea 3 David Rojas Chavarria - Sistemas distribuidos Universidad Nacional 2023
       </button>
     </div>
   </div>
