@@ -66,6 +66,8 @@
         }
       },
       async deleteAuthor(id) {
+        if(!confirm('Are you sure delete the selected author?'))
+          return;
         try {
           const httpResponse = await fetch(`${this.url}/authorDelete/${id}`, {
             headers: {

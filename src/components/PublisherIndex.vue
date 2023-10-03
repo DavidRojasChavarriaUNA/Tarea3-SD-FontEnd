@@ -66,6 +66,8 @@
         }
       },
       async deletePublisher(id) {
+        if(!confirm('Are you sure delete the selected publisher?'))
+          return;
         try {
           const httpResponse = await fetch(`${this.url}/publisherDelete/${id}`, {
             headers: {

@@ -66,6 +66,8 @@
         }
       },
       async deleteBook(id) {
+        if(!confirm('Are you sure delete the selected book?'))
+          return;
         try {
           const httpResponse = await fetch(`${this.url}/bookDelete/${id}`, {
             headers: {
