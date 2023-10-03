@@ -78,8 +78,10 @@
 
           if (httpResponse.status !== 200)
             alert(await httpResponse.text());
-          else
+          else{
+            alert('The publisher was deleted succesfully');
             this.GetAllPublishers();
+          }
         } catch (error) {
           console.error(error);
           alert(`An error ocurred deleting the publishers.`);

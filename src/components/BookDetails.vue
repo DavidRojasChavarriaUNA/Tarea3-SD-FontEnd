@@ -147,8 +147,10 @@
           });
           if (httpResponse.status !== 200)
             alert(await httpResponse.text());
-          else
+          else{
+            alert('The book\'s data was updated succesfully');
             this.$router.push('/book');
+          }
         } catch (error) {
           console.log(error);
           alert(`An error ocurred updating the book.`);
@@ -165,8 +167,10 @@
           });
           if (httpResponse.status !== 200)
             alert(await httpResponse.text());
-          else
+          else{
+            alert('The book was created succesfully');
             this.$router.push('/book');
+          }
         } catch (error) {
           console.log(error);
           alert(`An error ocurred updating the book.`);

@@ -78,8 +78,10 @@
 
           if (httpResponse.status !== 200)
             alert(await httpResponse.text());
-          else
+          else{
+            alert('The author was deleted succesfully');
             this.GetAllAuthors();
+          }
         } catch (error) {
           console.error(error);
           alert(`An error ocurred deleting the authors.`);
